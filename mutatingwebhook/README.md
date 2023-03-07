@@ -21,3 +21,34 @@ Then reapply the webhook using:
 ```
 kubectl apply -f webhook.yaml
 ```
+Start the Pod
+```
+kubectl apply -f pod.yaml
+```
+get the pod
+```
+kubectl get pods -A
+```
+The output of this command will be like
+```
+testmutatingwebhook   ubuntu                             1/1     Running   0               20s
+```
+To vaidate the webhook in a json file apply the command 
+```
+kubectl get pods -n testmutatingwebhook ubuntu -o json
+```
+The output shoud be like
+```
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "annotations": {
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"ubuntu\"},\"name\":\"ubuntu\",\"namespace\":\"testmutatingwebhook\"},\"spec\":{\"containers\":[{\"command\":[\"/bin/sleep\",\"1d\"],\"image\":\"ubuntu:latest\",\"imagePullPolicy\":\"IfNotPresent\",\"name\":\"ubuntu\"}]}}\n"
+        },
+        "creationTimestamp": "2023-03-07T08:32:58Z",
+        "labels": {
+            "app": "ubuntu",
+            "myExtraLabel": "webhook-was-here"
+        },
+        "name": "ubuntu",
+
